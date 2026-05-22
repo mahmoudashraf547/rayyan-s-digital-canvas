@@ -14,11 +14,12 @@ interface Props {
   layout?: "grid" | "list";
 }
 
-export function FileSection({ sectionKey, title, accept = ".pdf,.docx,.doc,.mp4,.webm,image/*", emptyHint, layout = "grid" }: Props) {
+export function FileSection({ sectionKey, title, accept = ".pdf,.docx,.doc,.ppt,.pptx,.mp4,.webm,image/*", emptyHint, layout = "grid" }: Props) {
   const { isAdmin, editMode } = useAdmin();
-  const { items, add, remove, update } = useSiteItems(sectionKey);
+  const { items, add, remove, update, duplicate, move } = useSiteItems(sectionKey);
   const fileRef = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(false);
+
 
   const canEdit = isAdmin && editMode;
 
