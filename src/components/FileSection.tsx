@@ -1,10 +1,12 @@
 import { useRef, useState } from "react";
 import { motion } from "framer-motion";
-import { Upload, FileText, Loader2, Plus } from "lucide-react";
+import { Upload, FileText, Loader2, Trash2 } from "lucide-react";
 import { useAdmin } from "@/lib/admin-context";
 import { useSiteItems } from "@/lib/items";
 import { uploadFile, getFileTypeFromName } from "@/lib/storage";
 import { FileCard } from "./FileCard";
+import { AddItemButton } from "./AddItemButton";
+import { EditableText } from "./EditableText";
 
 interface Props {
   sectionKey: string;
@@ -12,16 +14,33 @@ interface Props {
   accept?: string;
   emptyHint?: string;
   layout?: "grid" | "list";
+  hideTitle?: boolean;
+  onDelete?: () => void;
 }
 
-export function FileSection({ sectionKey, title, accept = ".pdf,.docx,.doc,.ppt,.pptx,.mp4,.webm,image/*", emptyHint, layout = "grid" }: Props) {
+export function FileSection({
+  sectionKey,
+  title,
+  accept = ".pdf,.docx,.doc,.ppt,.pptx,.mp4,.webm,image/*",
+  emptyHint,
+  layout = "grid",
+  hideTitle = false,
+  onDelete,
+}: Props) {
   const { isAdmin, editMode } = useAdmin();
   const { items, add, remove, update, duplicate, move } = useSiteItems(sectionKey);
   const fileRef = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(false);
-
+  const [visible, setVisible] = useState(true);
 
   const canEdit = isAdmin && editMode;
+
+  const handleDeleteSection = () => {
+    setVisible(false);
+    onDelete?.();
+  };
+
+  if (!visible) return null;
 
   const handleFiles = async (files: FileList | null) => {
     if (!files || files.length === 0) return;
@@ -41,29 +60,66 @@ export function FileSection({ sectionKey, title, accept = ".pdf,.docx,.doc,.ppt,
     }
   };
 
+  const createEmptyItem = async () => {
+    try {
+      await add({
+        title: "عنصر جديد",
+        description: "",
+        file_type: "other",
+      });
+    } catch (e) {
+      console.error(e);
+      alert("فشل إنشاء العنصر");
+    }
+  };
+
   return (
     <div>
-      <div className="flex items-center justify-between mb-4">
-        <h3 className="text-xl sm:text-2xl font-bold gradient-title">{title}</h3>
-        {canEdit && (
-          <button
-            onClick={() => fileRef.current?.click()}
-            disabled={uploading}
-            className="flex items-center gap-1.5 text-sm font-medium px-3 py-2 rounded-xl gradient-cta text-primary-foreground border-0"
-          >
-            {uploading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Plus className="w-4 h-4" />}
-            إضافة ملف
-          </button>
-        )}
-        <input
-          ref={fileRef}
-          type="file"
-          accept={accept}
-          multiple
-          onChange={(e) => handleFiles(e.target.files)}
-          className="hidden"
-        />
-      </div>
+      {(canEdit || !hideTitle) && (
+        <div className={`flex flex-wrap items-center justify-between mb-4 ${hideTitle && !canEdit ? "hidden" : ""}`}>
+          {!hideTitle && (
+            <EditableText
+              contentKey={`section.${sectionKey}.title`}
+              defaultValue={title}
+              as="h3"
+              className="text-xl sm:text-2xl font-bold gradient-title"
+            />
+          )}
+          {canEdit && (
+            <div className="flex flex-wrap items-center gap-2 justify-end">
+              <AddItemButton
+                onClick={createEmptyItem}
+                label="إضافة عنصر"
+                size="sm"
+              />
+              <button
+                onClick={() => fileRef.current?.click()}
+                disabled={uploading}
+                className="flex items-center gap-1.5 text-sm font-medium px-3 py-2 rounded-xl gradient-cta text-primary-foreground border-0"
+              >
+                {uploading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />}
+                رفع ملف
+              </button>
+              <button
+                type="button"
+                onClick={handleDeleteSection}
+                className="inline-flex items-center gap-2 rounded-full border border-red-200 bg-red-50 px-3 py-2 text-sm font-medium text-red-600 hover:bg-red-100 hover:text-red-700 transition"
+              >
+                <Trash2 className="w-4 h-4" />
+                حذف القسم
+              </button>
+            </div>
+          )}
+          <input
+            ref={fileRef}
+            type="file"
+            accept={accept}
+            multiple
+            onChange={(e) => handleFiles(e.target.files)}
+            className="hidden"
+          />
+        </div>
+      )}
 
       {items.length === 0 ? (
         <motion.div
@@ -72,15 +128,27 @@ export function FileSection({ sectionKey, title, accept = ".pdf,.docx,.doc,.ppt,
           className="glass rounded-2xl p-8 text-center"
         >
           {canEdit ? (
-            <button
-              onClick={() => fileRef.current?.click()}
-              className="flex flex-col items-center gap-3 mx-auto text-muted-foreground hover:text-primary transition"
-            >
-              <div className="w-14 h-14 rounded-2xl bg-accent/60 flex items-center justify-center">
-                <Upload className="w-6 h-6" />
+            <div className="flex flex-col items-center gap-4">
+              <button
+                onClick={() => fileRef.current?.click()}
+                className="flex flex-col items-center gap-3 mx-auto text-muted-foreground hover:text-primary transition"
+              >
+                <div className="w-14 h-14 rounded-2xl bg-accent/60 flex items-center justify-center">
+                  <Upload className="w-6 h-6" />
+                </div>
+                <span className="text-sm">اضغط لرفع الملفات أو اسحبها هنا</span>
+              </button>
+              <div className="flex items-center gap-2 text-muted-foreground">
+                <div className="flex-1 h-px bg-border" />
+                <span className="text-xs">أو</span>
+                <div className="flex-1 h-px bg-border" />
               </div>
-              <span className="text-sm">اضغط لرفع الملفات أو اسحبها هنا</span>
-            </button>
+              <AddItemButton
+                onClick={createEmptyItem}
+                label="إنشاء عنصر جديد"
+                size="md"
+              />
+            </div>
           ) : (
             <div className="flex flex-col items-center gap-2 text-muted-foreground">
               <FileText className="w-8 h-8 opacity-50" />
@@ -103,7 +171,6 @@ export function FileSection({ sectionKey, title, accept = ".pdf,.docx,.doc,.ppt,
             />
           ))}
         </div>
-
       )}
     </div>
   );

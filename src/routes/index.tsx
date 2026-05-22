@@ -8,6 +8,7 @@ import { EditableText } from "@/components/EditableText";
 import { SectionWrap, GlassCard } from "@/components/SectionWrap";
 import { FileSection } from "@/components/FileSection";
 import { ContactSection } from "@/components/ContactSection";
+import { DynamicSubsections } from "@/components/DynamicSubsections";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -51,6 +52,7 @@ function Index() {
             {tab === "contact" && (
               <SectionWrap id="contact" title="تواصل معي" subtitle="أسعد بتلقي رسائلكم">
                 <ContactSection />
+                <DynamicSubsections />
               </SectionWrap>
             )}
           </motion.div>
@@ -103,6 +105,8 @@ function HomeTab({ onEnter, portfolioRef }: { onEnter: () => void; portfolioRef:
       <SectionWrap id="reflections" title="الأوراق التأمّلية">
         <FileSection sectionKey="home.reflections" title="" emptyHint="لا توجد أوراق تأمّلية بعد." />
       </SectionWrap>
+
+      <DynamicSubsections />
     </div>
   );
 }
@@ -114,7 +118,12 @@ function Axis1Tab() {
       <FileSection sectionKey="axis1.reflection" title="الورقة التأمّلية للمحور" />
       <FileSection sectionKey="axis1.specialized" title="أوراق تأمّلية تخصصية (٣)" />
       <div className="pt-6 border-t border-border">
-        <h3 className="text-xl font-bold gradient-title mb-4">المساقات الأخرى</h3>
+        <EditableText
+          contentKey="section.axis1.moreSubjects.title"
+          defaultValue="المساقات الأخرى"
+          as="h3"
+          className="text-xl font-bold gradient-title mb-4"
+        />
         <div className="space-y-6">
           <FileSection sectionKey="axis1.curriculum" title="مساق المناهج" />
           <FileSection sectionKey="axis1.methods1" title="طرق التدريس ١" />
@@ -122,6 +131,8 @@ function Axis1Tab() {
           <FileSection sectionKey="axis1.projects" title="المشاريع الكبرى" />
         </div>
       </div>
+
+      <DynamicSubsections />
     </SectionWrap>
   );
 }
@@ -131,7 +142,12 @@ function Axis2Tab() {
     <SectionWrap id="axis2" title="التنوع في التدريس" subtitle="المحور الثاني">
       <FileSection sectionKey="axis2.reflection" title="الورقة التأمّلية للمحور" />
       <div>
-        <h3 className="text-xl font-bold gradient-title mb-4">خطط التدريس</h3>
+        <EditableText
+          contentKey="section.axis2.teachingPlans.title"
+          defaultValue="خطط التدريس"
+          as="h3"
+          className="text-xl font-bold gradient-title mb-4"
+        />
         <div className="space-y-6">
           <FileSection sectionKey="axis2.grade6" title="دروس الصف السادس" />
           <FileSection sectionKey="axis2.grade7" title="دروس الصف السابع" />
@@ -140,6 +156,8 @@ function Axis2Tab() {
       <FileSection sectionKey="axis2.comprehensive" title="الورقة التأمّلية الشاملة" />
       <FileSection sectionKey="axis2.peer" title="أدلّة زيارة الأقران" />
       <FileSection sectionKey="axis2.parent" title="نموذج التواصل مع أولياء الأمور" />
+
+      <DynamicSubsections />
     </SectionWrap>
   );
 }
@@ -151,6 +169,8 @@ function Axis3Tab() {
       <FileSection sectionKey="axis3.philosophy" title="فلسفتي في التدريس" />
       <FileSection sectionKey="axis3.scenario" title="أداة تقييم المهنية القائمة على السيناريو" />
       <FileSection sectionKey="axis3.attendance" title="سجلّ الحضور والانصراف" />
+
+      <DynamicSubsections />
     </SectionWrap>
   );
 }
@@ -163,7 +183,12 @@ function Axis4Tab() {
       <FileSection sectionKey="axis4.development" title="أدلّة التطوير المهني" />
       <FileSection sectionKey="axis4.workshops" title="خطط الورش الفنية" />
       <div className="pt-6 border-t border-border">
-        <h3 className="text-xl font-bold gradient-title mb-4">المشاريع السابقة</h3>
+        <EditableText
+          contentKey="section.axis4.previousProjects.title"
+          defaultValue="المشاريع السابقة"
+          as="h3"
+          className="text-xl font-bold gradient-title mb-4"
+        />
         <div className="space-y-6">
           <FileSection sectionKey="axis4.measurement" title="مشروع القياس والتقويم" />
           <FileSection sectionKey="axis4.psychology" title="مشروع علم النفس" />
@@ -171,6 +196,8 @@ function Axis4Tab() {
           <FileSection sectionKey="axis4.exhibitions" title="المعارض التخصصية" />
         </div>
       </div>
+
+      <DynamicSubsections />
     </SectionWrap>
   );
 }
@@ -183,6 +210,8 @@ function Axis5Tab() {
       <FileSection sectionKey="axis5.software" title="مهارات البرامج والأجهزة" />
       <FileSection sectionKey="axis5.presentations" title="العروض التقديمية المميزة" />
       <FileSection sectionKey="axis5.worksheets" title="أوراق العمل" />
+
+      <DynamicSubsections />
     </SectionWrap>
   );
 }

@@ -9,6 +9,7 @@ import { type SiteItem } from "@/lib/items";
 import { PdfPreviewModal } from "./PdfPreviewModal";
 import { DocxPreviewModal } from "./DocxPreviewModal";
 import { PdfThumbnail } from "./PdfThumbnail";
+import { AdminControls } from "./AdminControls";
 
 interface Props {
   item: SiteItem;
@@ -141,31 +142,30 @@ export function FileCard({ item, canEdit, onDelete, onRename, onDuplicate, onMov
             >
               <Download className="w-4 h-4" />
             </a>
+            {canEdit && (
+              <button
+                type="button"
+                onClick={onDelete}
+                className="inline-flex items-center justify-center rounded-xl border border-red-200 bg-red-50 px-3 py-2 text-red-600 hover:bg-red-100 hover:text-red-700 transition"
+                aria-label="حذف العنصر"
+              >
+                <Trash2 className="w-4 h-4" />
+              </button>
+            )}
           </div>
 
           {canEdit && (
-            <div className="flex items-center gap-1.5 mt-3 pt-3 border-t border-border/60">
-              <button onClick={() => setEditing(true)} className="flex-1 flex items-center justify-center gap-1 text-xs py-1.5 rounded-lg bg-accent/40 hover:bg-accent" aria-label="تعديل">
+            <div className="flex items-center gap-2 mt-3 pt-3 border-t border-border/60">
+              <button onClick={() => setEditing(true)} className="flex-1 flex items-center justify-center gap-1 text-xs py-1.5 rounded-lg bg-accent/40 hover:bg-accent transition" aria-label="تعديل">
                 <Pencil className="w-3.5 h-3.5" /> تعديل
               </button>
-              {onDuplicate && (
-                <button onClick={onDuplicate} className="flex-1 flex items-center justify-center gap-1 text-xs py-1.5 rounded-lg bg-accent/40 hover:bg-accent" aria-label="تكرار">
-                  <Copy className="w-3.5 h-3.5" /> تكرار
-                </button>
-              )}
-              {onMoveUp && (
-                <button onClick={onMoveUp} className="p-1.5 rounded-lg bg-accent/40 hover:bg-accent" aria-label="للأعلى">
-                  <ArrowUp className="w-3.5 h-3.5" />
-                </button>
-              )}
-              {onMoveDown && (
-                <button onClick={onMoveDown} className="p-1.5 rounded-lg bg-accent/40 hover:bg-accent" aria-label="للأسفل">
-                  <ArrowDown className="w-3.5 h-3.5" />
-                </button>
-              )}
-              <button onClick={onDelete} className="p-1.5 rounded-lg bg-destructive/10 hover:bg-destructive/20 text-destructive" aria-label="حذف">
-                <Trash2 className="w-3.5 h-3.5" />
-              </button>
+              <AdminControls
+                onDelete={onDelete}
+                onDuplicate={onDuplicate}
+                onMoveUp={onMoveUp}
+                onMoveDown={onMoveDown}
+                layout="horizontal"
+              />
             </div>
           )}
         </div>

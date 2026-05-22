@@ -9,46 +9,75 @@ export function UniversityCard() {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6 }}
-      className="glass-strong rounded-3xl p-5 sm:p-7 max-w-3xl mx-auto"
+      className="glass-strong rounded-3xl p-6 sm:p-8 max-w-4xl mx-auto overflow-hidden"
     >
-      <div className="flex items-start gap-4 sm:gap-6 justify-between">
-        <div className="flex-1 min-w-0 space-y-1">
-          <EditableText
-            contentKey="uni.name"
-            defaultValue="جامعة السلطان قابوس"
-            as="h2"
-            className="text-xl sm:text-3xl font-extrabold gradient-title"
-          />
-          <EditableText
-            contentKey="uni.college"
-            defaultValue="كلية التربية"
-            as="p"
-            className="text-base sm:text-lg font-semibold text-foreground/80"
-          />
-          <EditableText
-            contentKey="uni.dept"
-            defaultValue="قسم المناهج وطرق التدريس"
-            as="p"
-            className="text-xs sm:text-sm text-muted-foreground"
-          />
-          <EditableText
-            contentKey="uni.major"
-            defaultValue="التربية الفنية"
-            as="p"
-            className="text-base sm:text-lg font-bold pt-1 bg-gradient-to-l from-violet to-primary bg-clip-text text-transparent"
-          />
+      {/* Main layout container with RTL support */}
+      <div className="flex flex-col sm:flex-row items-center gap-6 sm:gap-8">
+        
+        {/* Text content - RIGHT side (in RTL) */}
+        <div className="flex-1 min-w-0 space-y-3 order-1 sm:order-2">
+          <div>
+            <EditableText
+              contentKey="uni.name"
+              defaultValue="جامعة السلطان قابوس"
+              as="h2"
+              className="text-2xl sm:text-4xl font-extrabold gradient-title leading-tight"
+            />
+          </div>
+          
+          <div className="space-y-2 pt-1">
+            <EditableText
+              contentKey="uni.college"
+              defaultValue="كلية التربية"
+              as="p"
+              className="text-lg sm:text-xl font-semibold text-foreground/90"
+            />
+            <EditableText
+              contentKey="uni.dept"
+              defaultValue="قسم المناهج وطرق التدريس"
+              as="p"
+              className="text-sm sm:text-base text-muted-foreground font-medium"
+            />
+          </div>
+
+          <div className="pt-2">
+            <EditableText
+              contentKey="uni.major"
+              defaultValue="التربية الفنية"
+              as="p"
+              className="text-lg sm:text-xl font-bold bg-gradient-to-l from-violet to-primary bg-clip-text text-transparent"
+            />
+          </div>
         </div>
 
-        <EditableImage
-          contentKey="uni.logo"
-          defaultUrl=""
-          fallback={
-            <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl bg-gradient-to-br from-accent to-lavender flex items-center justify-center shadow-soft">
-              <GraduationCap className="w-10 h-10 sm:w-12 sm:h-12 text-primary" />
+        {/* Premium Logo Container - LEFT side (in RTL) */}
+        <motion.div
+          whileHover={{ scale: 1.03, y: -4 }}
+          transition={{ type: "spring", stiffness: 400, damping: 30 }}
+          className="order-2 sm:order-1 shrink-0"
+        >
+          {/* Gradient border effect container */}
+          <div className="relative w-32 h-32 sm:w-40 sm:h-40">
+            {/* Gradient border background */}
+            <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-violet/40 via-primary/30 to-accent/40 p-1 opacity-80"></div>
+            
+            {/* Glass card with content */}
+            <div className="absolute inset-0 rounded-3xl p-1">
+              <div className="w-full h-full rounded-[1.375rem] bg-gradient-to-br from-white/95 via-accent/20 to-lavender/20 backdrop-blur-xl border border-white/40 flex items-center justify-center shadow-elegant overflow-hidden">
+                <EditableImage
+                  contentKey="uni.logo"
+                  defaultUrl=""
+                  fallback={
+                    <div className="w-full h-full flex items-center justify-center">
+                      <GraduationCap className="w-14 h-14 sm:w-16 sm:h-16 text-primary/60" />
+                    </div>
+                  }
+                  className="w-full h-full object-contain p-4 sm:p-5"
+                />
+              </div>
             </div>
-          }
-          className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl object-cover shadow-soft shrink-0"
-        />
+          </div>
+        </motion.div>
       </div>
     </motion.div>
   );

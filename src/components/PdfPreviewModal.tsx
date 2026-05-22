@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Download, ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
+import { X, Download, Loader2 } from "lucide-react";
 import { Document, Page, pdfjs } from "react-pdf";
 import "react-pdf/dist/Page/AnnotationLayer.css";
 import "react-pdf/dist/Page/TextLayer.css";
@@ -17,27 +17,32 @@ interface Props {
 
 export function PdfPreviewModal({ url, title, onClose }: Props) {
   const [pages, setPages] = useState(0);
-  const [pageNum, setPageNum] = useState(1);
   const [width, setWidth] = useState(800);
 
   useEffect(() => {
     if (!url) return;
-    setPageNum(1);
-    const w = typeof window !== "undefined" ? Math.min(window.innerWidth - 48, 900) : 800;
-    setWidth(w);
+
+    const updateWidth = () => {
+      const w = typeof window !== "undefined" ? Math.min(window.innerWidth - 64, 900) : 800;
+      setWidth(w);
+    };
+
+    updateWidth();
+    window.addEventListener("resize", updateWidth);
 
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
-      if (e.key === "ArrowLeft") setPageNum((p) => Math.min(pages || p, p + 1));
-      if (e.key === "ArrowRight") setPageNum((p) => Math.max(1, p - 1));
     };
+
     document.body.style.overflow = "hidden";
     window.addEventListener("keydown", onKey);
+
     return () => {
       document.body.style.overflow = "";
+      window.removeEventListener("resize", updateWidth);
       window.removeEventListener("keydown", onKey);
     };
-  }, [url, pages, onClose]);
+  }, [url, onClose]);
 
   return (
     <AnimatePresence>
@@ -68,7 +73,7 @@ export function PdfPreviewModal({ url, title, onClose }: Props) {
               </a>
             </div>
 
-            <div className="flex-1 overflow-auto p-4 bg-muted/30">
+            <div className="flex-1 overflow-y-auto p-4 bg-muted/30">
               <Document
                 file={url}
                 onLoadSuccess={({ numPages }) => setPages(numPages)}
@@ -79,31 +84,22 @@ export function PdfPreviewModal({ url, title, onClose }: Props) {
                 }
                 error={<p className="text-center text-destructive p-8">تعذّر فتح الملف</p>}
               >
-                <Page pageNumber={pageNum} width={width} renderAnnotationLayer={false} renderTextLayer={false} />
+                <div className="flex flex-col items-center gap-6">
+                  {Array.from({ length: pages }, (_, index) => (
+                    <div key={index} className="w-full flex justify-center">
+                      <div className="w-full max-w-[900px] rounded-[28px] overflow-hidden shadow-soft bg-white">
+                        <Page
+                          pageNumber={index + 1}
+                          width={width}
+                          renderAnnotationLayer={false}
+                          renderTextLayer={false}
+                        />
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </Document>
             </div>
-
-            {pages > 1 && (
-              <div className="flex items-center justify-center gap-3 p-3 border-t border-border shrink-0">
-                <button
-                  onClick={() => setPageNum((p) => Math.max(1, p - 1))}
-                  disabled={pageNum <= 1}
-                  className="p-2 rounded-lg hover:bg-accent disabled:opacity-30"
-                >
-                  <ChevronRight className="w-5 h-5" />
-                </button>
-                <span className="text-sm font-medium tabular-nums">
-                  {pageNum} / {pages}
-                </span>
-                <button
-                  onClick={() => setPageNum((p) => Math.min(pages, p + 1))}
-                  disabled={pageNum >= pages}
-                  className="p-2 rounded-lg hover:bg-accent disabled:opacity-30"
-                >
-                  <ChevronLeft className="w-5 h-5" />
-                </button>
-              </div>
-            )}
           </motion.div>
         </motion.div>
       )}

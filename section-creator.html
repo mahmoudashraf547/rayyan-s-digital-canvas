@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Section Creator — Admin</title>
+
+    <!-- Google Fonts: Tajawal + Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: { sans: ['Tajawal','Inter','sans-serif'] },
+            colors: {
+              'v-purple-600': '#6D28D9',
+              'v-purple-400': '#8B5CF6',
+              'glass-border': 'rgba(109,40,217,0.08)'
+            }
+          }
+        }
+      }
+    </script>
+
+    <style>
+      body { font-family: Tajawal, Inter, sans-serif; }
+      .gradient-text {
+        background: linear-gradient(90deg,#4C1D95 0%,#7C3AED 50%,#A78BFA 100%);
+        -webkit-background-clip: text; background-clip: text; color: transparent; font-weight:700;
+      }
+      .upload-hover { transition: all 180ms ease; }
+      .upload-hover:hover { transform: translateY(-3px); box-shadow: 0 12px 30px rgba(124,58,237,0.12); }
+    </style>
+  </head>
+
+  <body class="bg-gradient-to-b from-[#FBFBFF] to-[#F4F3FF] min-h-screen p-6 text-gray-800">
+    <main class="max-w-5xl mx-auto">
+
+      <!-- Admin control: New section form -->
+      <section class="mb-6 bg-white/70 p-4 rounded-2xl shadow-sm backdrop-blur card-strong">
+        <form id="new-section-form" class="flex flex-col sm:flex-row items-stretch gap-3 sm:items-center">
+          <label for="section-title" class="sr-only">اسم القسم</label>
+          <input id="section-title" type="text" placeholder="أدخل اسم القسم الجديد هنا..." class="flex-1 px-4 py-3 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-v-purple-400" />
+          <button id="add-section-btn" type="submit" class="inline-flex items-center gap-2 btn-gradient text-white px-4 py-3 rounded-lg">
+            إضافة قسم جديد
+          </button>
+        </form>
+      </section>
+
+      <!-- Sections container -->
+      <section id="sections" class="space-y-6">
+        <!-- Example initial section (renders as template for visuals) -->
+      </section>
+
+      <!-- Template: hidden template for new sections -->
+      <template id="section-template">
+        <div class="section card p-5" data-section-id="">
+          <!-- Header Row -->
+          <div class="flex items-center justify-between">
+            <div class="text-right">
+              <h3 class="section-title text-xl font-bold text-v-purple-600">عنوان القسم</h3>
+            </div>
+
+            <div class="flex items-center gap-3">
+              <button class="add-item inline-flex items-center gap-2 text-white px-3 py-2 rounded-md btn-gradient text-sm">
+                <!-- plus icon -->
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                </svg>
+                إضافة عنصر
+              </button>
+
+              <button class="upload-file inline-flex items-center gap-2 bg-white border border-gray-200 px-3 py-2 rounded-md text-sm text-gray-700">
+                <!-- upload icon -->
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v14m7-7H5" />
+                </svg>
+                رفع ملف
+              </button>
+            </div>
+          </div>
+
+          <!-- Content Card -->
+          <div class="mt-4 bg-white rounded-2xl shadow-sm p-6 upload-hover relative">
+            <div class="flex flex-col items-center text-center gap-4">
+              <div class="w-20 h-20 rounded-lg bg-white/60 flex items-center justify-center border border-dashed border-v-purple-400/20">
+                <!-- upload arrow -->
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-v-purple-400" fill="none" viewBox="0 0 24 24" stroke="#6D28D9">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1M12 4v12m0 0l-4-4m4 4 4-4" />
+                </svg>
+              </div>
+
+              <div class="text-gray-600 text-sm">اضغط لرفع الملفات أو اسحبها هنا</div>
+
+              <div>
+                <button class="create-element inline-flex items-center gap-2 text-white px-4 py-2 rounded-md btn-gradient">
+                  <!-- plus small -->
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                  </svg>
+                  إنشاء عنصر جديد
+                </button>
+              </div>
+
+              <!-- Area where created items will appear -->
+              <div class="mt-4 w-full grid grid-cols-1 sm:grid-cols-2 gap-3 items-container"></div>
+            </div>
+
+            <!-- Hidden file input for this section -->
+            <input type="file" class="hidden file-input" />
+          </div>
+        </div>
+      </template>
+
+    </main>
+
+    <script>
+      // Section Creator JavaScript
+      // Uses a template element to clone new sections and event delegation
+
+      (function () {
+        const form = document.getElementById('new-section-form');
+        const input = document.getElementById('section-title');
+        const sectionsRoot = document.getElementById('sections');
+        const template = document.getElementById('section-template');
+
+        let sectionCounter = 0;
+
+        // Helper: create a new section DOM from template
+        function createSection(title) {
+          sectionCounter += 1;
+          const clone = template.content.cloneNode(true);
+          const root = clone.querySelector('.section');
+          root.dataset.sectionId = String(sectionCounter);
+
+          const titleEl = clone.querySelector('.section-title');
+          titleEl.textContent = title || `قسم جديد ${sectionCounter}`;
+
+          // Wire up file input handling
+          const fileInput = clone.querySelector('.file-input');
+          const uploadBtn = clone.querySelector('.upload-file');
+          const createBtn = clone.querySelector('.create-element');
+          const addItemBtn = clone.querySelector('.add-item');
+          const itemsContainer = clone.querySelector('.items-container');
+          const contentCard = clone.querySelector('.upload-hover');
+
+          // When upload button clicked, trigger hidden file input
+          uploadBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            fileInput.click();
+          });
+
+          // When file selected, show a small preview card in itemsContainer
+          fileInput.addEventListener('change', (ev) => {
+            const file = ev.target.files && ev.target.files[0];
+            if (!file) return;
+            addFilePreview(itemsContainer, file);
+            // reset input so same file can be chosen again
+            fileInput.value = '';
+          });
+
+          // Drag & drop support on contentCard
+          contentCard.addEventListener('dragover', (ev) => { ev.preventDefault(); contentCard.classList.add('ring-2','ring-v-purple-400'); });
+          contentCard.addEventListener('dragleave', (ev) => { contentCard.classList.remove('ring-2','ring-v-purple-400'); });
+          contentCard.addEventListener('drop', (ev) => {
+            ev.preventDefault(); contentCard.classList.remove('ring-2','ring-v-purple-400');
+            const file = ev.dataTransfer.files && ev.dataTransfer.files[0];
+            if (file) addFilePreview(itemsContainer, file);
+          });
+
+          // create-element button: create a simple item card
+          createBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            addElementItem(itemsContainer);
+          });
+
+          // add-item button: same as create-element (could open modal in real app)
+          addItemBtn.addEventListener('click', (e) => { e.preventDefault(); addElementItem(itemsContainer); });
+
+          // append to root DOM
+          sectionsRoot.prepend(clone);
+        }
+
+        // Create a small element card (simulates uploaded/doc item)
+        function addElementItem(container) {
+          const el = document.createElement('div');
+          el.className = 'bg-white rounded-lg p-3 shadow-sm flex items-center gap-3';
+          el.innerHTML = `
+            <div class="w-14 h-20 bg-gradient-to-b from-[#FFF6FB] to-[#FDE8F8] rounded-md flex items-center justify-center">
+              <svg xmlns=\"http://www.w3.org/2000/svg\" width=\"32\" height=\"44\" viewBox=\"0 0 48 64\" fill=\"none\"><rect width=\"48\" height=\"64\" rx=\"6\" fill=\"#FFEFF8\"/><path d=\"M12 20h24\" stroke=\"#F6A6E0\" stroke-width=\"2\" stroke-linecap=\"round\"/></svg>
+            </div>
+            <div class=\"flex-1 text-right\">\n              <div class=\"text-sm font-semibold text-gray-800\">عنصر جديد</div>\n              <div class=\"text-xs text-gray-400 mt-1\">-</div>\n              <div class=\"mt-2 flex gap-2 justify-start\">\n                <button class=\"px-2 py-1 border rounded text-sm\">معاينة</button>\n                <button class=\"px-2 py-1 btn-gradient text-white rounded text-sm\">تعديل</button>\n              </div>\n            </div>`;
+          container.prepend(el);
+        }
+
+        // Create a preview card for a selected file (filename shown)
+        function addFilePreview(container, file) {
+          const el = document.createElement('div');
+          el.className = 'bg-white rounded-lg p-3 shadow-sm flex items-center gap-3';
+          const name = escapeHtml(file.name);
+          el.innerHTML = `
+            <div class=\"w-14 h-20 bg-gray-50 rounded-md flex items-center justify-center text-xs text-gray-500\">FILE</div>
+            <div class=\"flex-1 text-right\">\n              <div class=\"text-sm font-semibold text-gray-800\">${name}</div>\n              <div class=\"text-xs text-gray-400 mt-1\">حجم: ${(file.size/1024).toFixed(1)} ك.ب</div>\n            </div>`;
+          container.prepend(el);
+        }
+
+        // simple HTML escaper
+        function escapeHtml(unsafe) { return unsafe.replace(/[&<>\"']/g, function(m){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":"&#039;"}[m]; }); }
+
+        // Handle form submit to create a new section
+        form.addEventListener('submit', (ev) => {
+          ev.preventDefault();
+          const val = input.value.trim();
+          if (!val) {
+            // simple validation
+            input.classList.add('ring-2','ring-red-300');
+            setTimeout(()=> input.classList.remove('ring-2','ring-red-300'), 1200);
+            return;
+          }
+          createSection(val);
+          input.value = '';
+        });
+
+        // Create an initial demo section
+        createSection('المهارات التقنية');
+      })();
+    </script>
+  </body>
+</html>

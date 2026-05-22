@@ -44,6 +44,11 @@ export function EditableText({ contentKey, defaultValue, as = "p", className, mu
         value={draft}
         onChange={(e) => setDraft(e.target.value)}
         onBlur={() => draft !== value && set(contentKey, draft)}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+            e.currentTarget.blur();
+          }
+        }}
         className={cn(
           "w-full bg-accent/40 border-2 border-dashed border-primary/40 rounded-lg px-3 py-2 outline-none focus:border-primary",
           className,
