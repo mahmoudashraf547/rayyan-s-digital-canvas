@@ -14,7 +14,96 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      comments: {
+        Row: {
+          approved: boolean
+          created_at: string
+          email: string | null
+          id: string
+          message: string
+          name: string
+        }
+        Insert: {
+          approved?: boolean
+          created_at?: string
+          email?: string | null
+          id?: string
+          message: string
+          name: string
+        }
+        Update: {
+          approved?: boolean
+          created_at?: string
+          email?: string | null
+          id?: string
+          message?: string
+          name?: string
+        }
+        Relationships: []
+      }
+      site_content: {
+        Row: {
+          key: string
+          updated_at: string
+          updated_by: string | null
+          value: Json
+        }
+        Insert: {
+          key: string
+          updated_at?: string
+          updated_by?: string | null
+          value?: Json
+        }
+        Update: {
+          key?: string
+          updated_at?: string
+          updated_by?: string | null
+          value?: Json
+        }
+        Relationships: []
+      }
+      site_items: {
+        Row: {
+          created_at: string
+          description: string | null
+          file_path: string | null
+          file_type: string | null
+          file_url: string | null
+          id: string
+          meta: Json
+          position: number
+          section_key: string
+          title: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          file_path?: string | null
+          file_type?: string | null
+          file_url?: string | null
+          id?: string
+          meta?: Json
+          position?: number
+          section_key: string
+          title?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          file_path?: string | null
+          file_type?: string | null
+          file_url?: string | null
+          id?: string
+          meta?: Json
+          position?: number
+          section_key?: string
+          title?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
