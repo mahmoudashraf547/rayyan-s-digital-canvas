@@ -90,16 +90,20 @@ export function FileSection({ sectionKey, title, accept = ".pdf,.docx,.doc,.ppt,
         </motion.div>
       ) : (
         <div className={layout === "grid" ? "grid sm:grid-cols-2 lg:grid-cols-3 gap-4" : "space-y-3"}>
-          {items.map((it) => (
+          {items.map((it, idx) => (
             <FileCard
               key={it.id}
               item={it}
               canEdit={canEdit}
               onDelete={() => remove(it.id)}
               onRename={(t) => update(it.id, { title: t })}
+              onDuplicate={canEdit ? () => duplicate(it.id) : undefined}
+              onMoveUp={canEdit && idx > 0 ? () => move(it.id, -1) : undefined}
+              onMoveDown={canEdit && idx < items.length - 1 ? () => move(it.id, 1) : undefined}
             />
           ))}
         </div>
+
       )}
     </div>
   );
