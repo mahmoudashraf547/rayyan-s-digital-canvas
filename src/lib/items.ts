@@ -70,5 +70,36 @@ export function useSiteItems(sectionKey: string) {
     await reload();
   }, [reload]);
 
-  return { items, loading, add, update, remove, reload };
+  const duplicate = useCallback(async (id: string) => {
+    const src = items.find((i) => i.id === id);
+    if (!src) return;
+    const { error } = await supabase.from("site_items").insert({
+      section_key: sectionKey,
+      title: src.title ? `${src.title} (نسخة)` : null,
+      description: src.description,
+      file_url: src.file_url,
+      file_type: src.file_type,
+      meta: (src.meta ?? {}) as never,
+      position: items.length,
+    });
+    if (error) throw error;
+    await reload();
+  }, [items, sectionKey, reload]);
+
+  const move = useCallback(async (id: string, dir: -1 | 1) => {
+    const idx = items.findIndex((i) => i.id === id);
+    if (idx < 0) return;
+    const swapIdx = idx + dir;
+    if (swapIdx < 0 || swapIdx >= items.length) return;
+    const a = items[idx];
+    const b = items[swapIdx];
+    await Promise.all([
+      supabase.from("site_items").update({ position: swapIdx } as never).eq("id", a.id),
+      supabase.from("site_items").update({ position: idx } as never).eq("id", b.id),
+    ]);
+    await reload();
+  }, [items, reload]);
+
+  return { items, loading, add, update, remove, duplicate, move, reload };
 }
+

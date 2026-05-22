@@ -14,11 +14,12 @@ interface Props {
   layout?: "grid" | "list";
 }
 
-export function FileSection({ sectionKey, title, accept = ".pdf,.docx,.doc,.mp4,.webm,image/*", emptyHint, layout = "grid" }: Props) {
+export function FileSection({ sectionKey, title, accept = ".pdf,.docx,.doc,.ppt,.pptx,.mp4,.webm,image/*", emptyHint, layout = "grid" }: Props) {
   const { isAdmin, editMode } = useAdmin();
-  const { items, add, remove, update } = useSiteItems(sectionKey);
+  const { items, add, remove, update, duplicate, move } = useSiteItems(sectionKey);
   const fileRef = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(false);
+
 
   const canEdit = isAdmin && editMode;
 
@@ -89,16 +90,20 @@ export function FileSection({ sectionKey, title, accept = ".pdf,.docx,.doc,.mp4,
         </motion.div>
       ) : (
         <div className={layout === "grid" ? "grid sm:grid-cols-2 lg:grid-cols-3 gap-4" : "space-y-3"}>
-          {items.map((it) => (
+          {items.map((it, idx) => (
             <FileCard
               key={it.id}
               item={it}
               canEdit={canEdit}
               onDelete={() => remove(it.id)}
               onRename={(t) => update(it.id, { title: t })}
+              onDuplicate={canEdit ? () => duplicate(it.id) : undefined}
+              onMoveUp={canEdit && idx > 0 ? () => move(it.id, -1) : undefined}
+              onMoveDown={canEdit && idx < items.length - 1 ? () => move(it.id, 1) : undefined}
             />
           ))}
         </div>
+
       )}
     </div>
   );
