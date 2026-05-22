@@ -1,12 +1,14 @@
-import { useEffect, useRef, useState } from "react";
+import { createElement, useEffect, useState } from "react";
 import { useAdmin } from "@/lib/admin-context";
 import { useContentStore } from "@/lib/content";
 import { cn } from "@/lib/utils";
 
+type Tag = "h1" | "h2" | "h3" | "h4" | "p" | "span" | "div";
+
 interface Props {
   contentKey: string;
   defaultValue: string;
-  as?: "h1" | "h2" | "h3" | "h4" | "p" | "span" | "div";
+  as?: Tag;
   className?: string;
   multiline?: boolean;
 }
@@ -16,13 +18,10 @@ export function EditableText({ contentKey, defaultValue, as = "p", className, mu
   const { get, set } = useContentStore();
   const value = get(contentKey, defaultValue);
   const [draft, setDraft] = useState(value);
-  const [editing, setEditing] = useState(false);
-  const ref = useRef<HTMLElement | null>(null);
 
   useEffect(() => setDraft(value), [value]);
 
   const canEdit = isAdmin && editMode;
-  const Tag = as as keyof React.JSX.IntrinsicElements;
 
   if (canEdit) {
     if (multiline) {
@@ -36,6 +35,7 @@ export function EditableText({ contentKey, defaultValue, as = "p", className, mu
             className,
           )}
           rows={Math.max(2, Math.min(10, draft.split("\n").length + 1))}
+          dir="rtl"
         />
       );
     }
@@ -48,17 +48,10 @@ export function EditableText({ contentKey, defaultValue, as = "p", className, mu
           "w-full bg-accent/40 border-2 border-dashed border-primary/40 rounded-lg px-3 py-2 outline-none focus:border-primary",
           className,
         )}
+        dir="rtl"
       />
     );
   }
 
-  return (
-    <Tag
-      ref={ref as never}
-      className={cn(canEdit && "ring-1 ring-primary/30 ring-offset-2 rounded", className)}
-      onDoubleClick={() => canEdit && setEditing(true)}
-    >
-      {value}
-    </Tag>
-  );
+  return createElement(as, { className }, value);
 }
