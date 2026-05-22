@@ -45,6 +45,13 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "ملف التدريب الميداني" },
+      { property: "og:title", content: "ملف التدريب الميداني" },
+      { name: "twitter:title", content: "ملف التدريب الميداني" },
+      { name: "description", content: "An interactive Arabic e-portfolio and CMS builder for art education student teachers." },
+      { property: "og:description", content: "An interactive Arabic e-portfolio and CMS builder for art education student teachers." },
+      { name: "twitter:description", content: "An interactive Arabic e-portfolio and CMS builder for art education student teachers." },
+      { name: "twitter:card", content: "summary" },
+      { property: "og:type", content: "website" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
