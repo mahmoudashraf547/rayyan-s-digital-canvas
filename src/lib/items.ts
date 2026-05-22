@@ -55,15 +55,20 @@ export function useSiteItems(sectionKey: string) {
       position: items.length,
     });
     if (error) throw error;
-  }, [sectionKey, items.length]);
+    await reload();
+  }, [sectionKey, items.length, reload]);
 
   const update = useCallback(async (id: string, patch: Partial<SiteItem>) => {
-    await supabase.from("site_items").update(patch as never).eq("id", id);
-  }, []);
+    const { error } = await supabase.from("site_items").update(patch as never).eq("id", id);
+    if (error) throw error;
+    await reload();
+  }, [reload]);
 
   const remove = useCallback(async (id: string) => {
-    await supabase.from("site_items").delete().eq("id", id);
-  }, []);
+    const { error } = await supabase.from("site_items").delete().eq("id", id);
+    if (error) throw error;
+    await reload();
+  }, [reload]);
 
   return { items, loading, add, update, remove, reload };
 }
