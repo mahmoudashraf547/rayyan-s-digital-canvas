@@ -31,11 +31,14 @@ function Index() {
       <Navbar active={tab} onChange={(t) => { setTab(t); window.scrollTo({ top: 0, behavior: "smooth" }); }} />
 
       <main className="px-3 sm:px-4 pb-24 max-w-6xl mx-auto">
-        <div className="mt-4 mb-8">
-          <UniversityCard />
-        </div>
+        {tab === "home" && (
+          <div className="mt-4 mb-8">
+            <UniversityCard />
+          </div>
+        )}
 
         <AnimatePresence mode="wait">
+
           <motion.div
             key={tab}
             initial={{ opacity: 0, y: 12 }}
