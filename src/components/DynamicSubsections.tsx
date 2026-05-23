@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { AddItemButton } from "./AddItemButton";
 import { FileSection } from "./FileSection";
-import { Copy, Edit3, Trash2, ArrowUp, ArrowDown } from "lucide-react";
+import { Copy, CreditCard as Edit3, Trash2, ArrowUp, ArrowDown } from "lucide-react";
+import { useAdmin } from "@/lib/admin-context";
 
 interface Subsection {
   id: string;
@@ -15,6 +16,8 @@ function uuid() {
 }
 
 export function DynamicSubsections() {
+  const { isAdmin, editMode } = useAdmin();
+  const canEdit = isAdmin && editMode;
   const [subsections, setSubsections] = useState<Subsection[]>([]);
 
   const addSubsection = () => {
@@ -71,57 +74,61 @@ export function DynamicSubsections() {
 
   return (
     <div className="mt-10 border-t border-border pt-8">
-      <div className="flex justify-end">
-        <AddItemButton onClick={addSubsection} label="إضافة قسم فرعي جديد" size="md" />
-      </div>
+      {canEdit && (
+        <div className="flex justify-end">
+          <AddItemButton onClick={addSubsection} label="إضافة قسم فرعي جديد" size="md" />
+        </div>
+      )}
 
       <div className="space-y-10 mt-8">
         {subsections.map((subsection) => (
           <div key={subsection.id} className="space-y-4">
             <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
               <h3 className="text-xl sm:text-2xl font-bold gradient-title text-right">{subsection.title}</h3>
-              <div className="flex flex-wrap gap-2 justify-start">
-                <button
-                  type="button"
-                  className="inline-flex items-center gap-2 rounded-full border border-border bg-white px-3 py-2 text-sm text-violet-700 hover:bg-violet-50"
-                  onClick={() => editSubsectionTitle(subsection.id)}
-                >
-                  <Edit3 className="w-4 h-4" />
-                  تحرير العنوان
-                </button>
-                <button
-                  type="button"
-                  className="inline-flex items-center gap-2 rounded-full border border-border bg-white px-3 py-2 text-sm text-violet-700 hover:bg-violet-50"
-                  onClick={() => duplicateSubsection(subsection.id)}
-                >
-                  <Copy className="w-4 h-4" />
-                  نسخ
-                </button>
-                <button
-                  type="button"
-                  className="inline-flex items-center gap-2 rounded-full border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-600 hover:bg-red-100 hover:text-red-700 transition"
-                  onClick={() => deleteSubsection(subsection.id)}
-                >
-                  <Trash2 className="w-4 h-4" />
-                  حذف
-                </button>
-                <button
-                  type="button"
-                  className="inline-flex items-center gap-2 rounded-full border border-border bg-white px-3 py-2 text-sm text-violet-700 hover:bg-violet-50"
-                  onClick={() => moveSubsection(subsection.id, -1)}
-                >
-                  <ArrowUp className="w-4 h-4" />
-                  أعلى
-                </button>
-                <button
-                  type="button"
-                  className="inline-flex items-center gap-2 rounded-full border border-border bg-white px-3 py-2 text-sm text-violet-700 hover:bg-violet-50"
-                  onClick={() => moveSubsection(subsection.id, 1)}
-                >
-                  <ArrowDown className="w-4 h-4" />
-                  أسفل
-                </button>
-              </div>
+              {canEdit && (
+                <div className="flex flex-wrap gap-2 justify-start">
+                  <button
+                    type="button"
+                    className="inline-flex items-center gap-2 rounded-full border border-border bg-white px-3 py-2 text-sm text-violet-700 hover:bg-violet-50"
+                    onClick={() => editSubsectionTitle(subsection.id)}
+                  >
+                    <Edit3 className="w-4 h-4" />
+                    تحرير العنوان
+                  </button>
+                  <button
+                    type="button"
+                    className="inline-flex items-center gap-2 rounded-full border border-border bg-white px-3 py-2 text-sm text-violet-700 hover:bg-violet-50"
+                    onClick={() => duplicateSubsection(subsection.id)}
+                  >
+                    <Copy className="w-4 h-4" />
+                    نسخ
+                  </button>
+                  <button
+                    type="button"
+                    className="inline-flex items-center gap-2 rounded-full border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-600 hover:bg-red-100 hover:text-red-700 transition"
+                    onClick={() => deleteSubsection(subsection.id)}
+                  >
+                    <Trash2 className="w-4 h-4" />
+                    حذف
+                  </button>
+                  <button
+                    type="button"
+                    className="inline-flex items-center gap-2 rounded-full border border-border bg-white px-3 py-2 text-sm text-violet-700 hover:bg-violet-50"
+                    onClick={() => moveSubsection(subsection.id, -1)}
+                  >
+                    <ArrowUp className="w-4 h-4" />
+                    أعلى
+                  </button>
+                  <button
+                    type="button"
+                    className="inline-flex items-center gap-2 rounded-full border border-border bg-white px-3 py-2 text-sm text-violet-700 hover:bg-violet-50"
+                    onClick={() => moveSubsection(subsection.id, 1)}
+                  >
+                    <ArrowDown className="w-4 h-4" />
+                    أسفل
+                  </button>
+                </div>
+              )}
             </div>
 
             <div className="rounded-[28px] border border-border/80 bg-white p-6 sm:p-8 shadow-[0_24px_60px_rgba(15,23,42,0.08)]">
