@@ -3,6 +3,8 @@ import { GraduationCap } from "lucide-react";
 import { EditableText } from "./EditableText";
 import { EditableImage } from "./EditableImage";
 
+import { ProfileMetadataHome } from "./ProfileMetadataHome";
+
 export function UniversityCard() {
   return (
     <motion.div
@@ -16,6 +18,7 @@ export function UniversityCard() {
         
         {/* Text content - RIGHT side (in RTL) */}
         <div className="flex-1 min-w-0 space-y-3 order-1 sm:order-2 text-center sm:text-right">
+
           <div>
             <EditableText
               contentKey="uni.name"
@@ -48,7 +51,10 @@ export function UniversityCard() {
               className="text-lg sm:text-xl font-bold bg-gradient-to-l from-violet to-primary bg-clip-text text-transparent"
             />
           </div>
+
+          <ProfileMetadataHome />
         </div>
+
 
         {/* Premium Logo Container - LEFT side (in RTL) */}
         <motion.div
