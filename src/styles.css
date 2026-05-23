@@ -2,6 +2,12 @@
 @source "../src";
 @import "tw-animate-css";
 
+/* Google Fonts imports for typography customizer */
+@import url("https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;700;900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=El+Messiri:wght@400;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700;900&display=swap");
+
 @custom-variant dark (&:is(.dark *));
 
 /*
@@ -20,6 +26,10 @@
 
   --font-sans: "Tajawal", "Cairo", system-ui, sans-serif;
   --font-display: "Tajawal", "Cairo", system-ui, sans-serif;
+  --font-tajawal: "Tajawal", system-ui, sans-serif;
+  --font-cairo: "Cairo", system-ui, sans-serif;
+  --font-el-messiri: "El Messiri", system-ui, sans-serif;
+  --font-montserrat: "Montserrat", system-ui, sans-serif;
 
   --color-background: var(--background);
   --color-foreground: var(--foreground);
