@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { EditableText } from "./EditableText";
+import { useContentStore } from "@/lib/content";
 
 export const TABS = [
   { id: "home", label: "الرئيسية" },
