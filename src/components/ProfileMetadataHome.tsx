@@ -2,19 +2,20 @@ import { EditableText } from "@/components/EditableText";
 
 function Field({ label, contentKey, defaultValue }: { label: string; contentKey: string; defaultValue: string }) {
   return (
-    <div className="flex items-start justify-between gap-3">
-      <div className="text-xs sm:text-[13px] text-muted-foreground/90 font-medium whitespace-nowrap">{label}</div>
+    <div className="flex items-center justify-between gap-4">
+      <div className="text-xs sm:text-[13px] text-slate-800 font-semibold whitespace-nowrap">{label}</div>
       <div className="min-w-0 flex-1">
         <EditableText
           contentKey={contentKey}
           defaultValue={defaultValue}
           as="p"
-          className="text-xs sm:text-sm text-foreground/90 font-semibold"
+          className="text-xs sm:text-sm text-slate-900 font-semibold leading-snug break-words"
         />
       </div>
     </div>
   );
 }
+
 
 export function ProfileMetadataHome() {
   return (
