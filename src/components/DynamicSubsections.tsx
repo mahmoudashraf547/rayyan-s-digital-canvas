@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { useAdmin } from "@/lib/admin-context";
+
 import { AddItemButton } from "./AddItemButton";
 import { FileSection } from "./FileSection";
 import { Copy, Edit3, Trash2, ArrowUp, ArrowDown } from "lucide-react";
@@ -15,7 +17,11 @@ function uuid() {
 }
 
 export function DynamicSubsections() {
+  const { isAdmin, editMode } = useAdmin();
+  const canEdit = isAdmin && editMode;
+
   const [subsections, setSubsections] = useState<Subsection[]>([]);
+
 
   const addSubsection = () => {
     const title = window.prompt("أدخل عنوان القسم الفرعي:");
@@ -71,9 +77,12 @@ export function DynamicSubsections() {
 
   return (
     <div className="mt-10 border-t border-border pt-8">
-      <div className="flex justify-end">
-        <AddItemButton onClick={addSubsection} label="إضافة قسم فرعي جديد" size="md" />
-      </div>
+      {canEdit && (
+        <div className="flex justify-end">
+          <AddItemButton onClick={addSubsection} label="إضافة قسم فرعي جديد" size="md" />
+        </div>
+      )}
+
 
       <div className="space-y-10 mt-8">
         {subsections.map((subsection) => (
