@@ -17,6 +17,8 @@ export const TABS = [
 export type TabId = (typeof TABS)[number]["id"];
 
 export function Navbar({ active, onChange }: { active: TabId; onChange: (id: TabId) => void }) {
+  const { get } = useContentStore();
+  const tabLabel = (id: TabId, fallback: string) => get(`tab.${id}.label`, fallback);
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
@@ -55,7 +57,7 @@ export function Navbar({ active, onChange }: { active: TabId; onChange: (id: Tab
                     transition={{ type: "spring", stiffness: 380, damping: 30 }}
                   />
                 )}
-                <span className="relative">{t.label}</span>
+                <span className="relative">{tabLabel(t.id, t.label)}</span>
               </button>
             ))}
           </nav>
@@ -87,7 +89,7 @@ export function Navbar({ active, onChange }: { active: TabId; onChange: (id: Tab
                     active === t.id ? "gradient-cta text-primary-foreground" : "hover:bg-accent"
                   }`}
                 >
-                  {t.label}
+                  {tabLabel(t.id, t.label)}
                 </button>
               ))}
             </div>

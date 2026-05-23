@@ -8,6 +8,7 @@ import { EditableText } from "@/components/EditableText";
 import { SectionWrap, GlassCard } from "@/components/SectionWrap";
 import { FileSection } from "@/components/FileSection";
 import { ContactSection } from "@/components/ContactSection";
+import { ProfileMetadata } from "@/components/ProfileMetadata";
 import { DynamicSubsections } from "@/components/DynamicSubsections";
 
 export const Route = createFileRoute("/")({
@@ -31,9 +32,11 @@ function Index() {
       <Navbar active={tab} onChange={(t) => { setTab(t); window.scrollTo({ top: 0, behavior: "smooth" }); }} />
 
       <main className="px-3 sm:px-4 pb-24 max-w-6xl mx-auto">
-        <div className="mt-4 mb-8">
-          <UniversityCard />
-        </div>
+        {tab === "home" && (
+          <div className="mt-4 mb-8">
+            <UniversityCard />
+          </div>
+        )}
 
         <AnimatePresence mode="wait">
           <motion.div
@@ -70,6 +73,7 @@ function HomeTab({ onEnter, portfolioRef }: { onEnter: () => void; portfolioRef:
   return (
     <div className="space-y-10">
       <Hero onEnter={onEnter} />
+      <ProfileMetadata />
 
       <div ref={portfolioRef} className="grid sm:grid-cols-2 gap-4">
         <GlassCard>
