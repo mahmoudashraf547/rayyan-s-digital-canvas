@@ -12,10 +12,10 @@ export function UniversityCard() {
       className="glass-strong rounded-3xl p-6 sm:p-8 max-w-4xl mx-auto overflow-hidden"
     >
       {/* Main layout container with RTL support */}
-      <div className="flex flex-col sm:flex-row items-center gap-6 sm:gap-8">
+      <div className="flex flex-col sm:flex-row items-center justify-center sm:justify-start gap-6 sm:gap-8">
         
         {/* Text content - RIGHT side (in RTL) */}
-        <div className="flex-1 min-w-0 space-y-3 order-1 sm:order-2">
+        <div className="flex-1 min-w-0 space-y-3 order-1 sm:order-2 text-center sm:text-right">
           <div>
             <EditableText
               contentKey="uni.name"
