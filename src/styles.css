@@ -95,9 +95,10 @@
 
   /* Gradients & effects */
   --gradient-page: linear-gradient(180deg,
-    oklch(0.985 0.012 280) 0%,
-    oklch(0.96 0.04 285) 35%,
-    oklch(0.94 0.06 280) 100%);
+    oklch(0.98 0.015 285) 0%,
+    oklch(0.96 0.05 285) 20%,
+    oklch(0.945 0.08 285) 50%,
+    oklch(0.94 0.1 280) 100%);
   --gradient-hero: linear-gradient(135deg,
     oklch(0.92 0.06 240) 0%,
     oklch(0.88 0.08 280) 50%,
@@ -152,10 +153,12 @@
 
   html {
     direction: rtl;
+    background: var(--gradient-page);
+    min-height: 100%;
   }
 
   body {
-    background: var(--gradient-page);
+    background: inherit;
     color: var(--color-foreground);
     font-family: var(--font-sans);
     min-height: 100vh;
